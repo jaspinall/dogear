@@ -1,0 +1,22 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Book Form</title>
+</head>
+<body>
+  Add Book
+  <form method='POST' action='/postBook'>
+    <input name="title" type="text" placeholder="title"></input>
+    <input name="author" type="author" placeholder="author"></input>
+    <input name="pages" type="text" placeholder="pages"></input>
+    <input name="genre" type="genre" placeholder="genre"></input>
+    <input type='submit' value='Create Book'></button>
+  </form>
+  Books
+  <ul>
+  <% books.forEach(function(book){ %>
+    <li><%= book.title %></li>
+  <% }) %>
+  </ul>
+</body>
+</html>

@@ -1,0 +1,68 @@
+body {
+  background: $lightBlue;
+  font-family: Helvetica, arial, sans-serif;
+}
+
+#main {
+  width: 90%;
+  margin: 20px auto;
+  padding: 0;
+}
+
+#form {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 20px;
+  float: left;
+  clear: both;
+  background-color: lightGrey;
+  padding: 10px;
+}
+
+input, button {
+  height: 20px;
+  font-size: 1.2em;
+  float: left;
+  clear: both;
+  margin: 5px;
+}
+
+button {
+  height: 30px;
+  font-size: 1.2em;
+  float: left;
+  margin: 10px;
+}
+
+#current {
+  width: 80%;
+  margin-top: 10px;
+  clear: both;
+}
+
+#finished {
+  width: 80%;
+  margin-top: 10px;
+  clear: both;
+}
+
+.book {
+  width: 95%;
+  float: left;
+  clear: both;
+  box-sizing: border-box;
+  height: 120px;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid gainsboro;
+  margin: 15px;
+  padding: 10px;
+  font-size: 1.5em;
+  font-weight: 550;
+  text-align: left;
+
+  &:hover {
+    background-color: darken(white, 15);
+  }
+
+}
