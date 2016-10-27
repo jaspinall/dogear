@@ -1,68 +1,87 @@
 body {
-  background: $lightBlue;
-  font-family: Helvetica, arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ba9983;
+  font-family: Arial;
+  color: #3d1f0c;
 }
 
 #main {
-  width: 90%;
-  margin: 20px auto;
-  padding: 0;
+  width: 900px;
+  margin-top: 50px;
+  margin: auto;
+  padding-top: 50px;
 }
 
 #form {
-  width: 80%;
+  margin-top: 50px;
+  width: 300px;
   margin: auto;
   margin-bottom: 20px;
-  float: left;
+  float: right;
   clear: both;
-  background-color: lightGrey;
+  background-color: #f9ece3;
   padding: 10px;
+  border-radius: 10px;
 }
 
-input, button {
-  height: 20px;
+#formElements {
+  width: 280px;
+  margin: auto;
+}
+
+input {
+  width: 250px;
+  border-radius: 3px;
+  height: 30px;
   font-size: 1.2em;
-  float: left;
-  clear: both;
-  margin: 5px;
+  margin: auto;
+  margin-bottom: 10px;
 }
 
 button {
+  background-color: #ba9983;
+  border-radius: 3px;
   height: 30px;
-  font-size: 1.2em;
-  float: left;
-  margin: 10px;
+  width: 250px;
+  font-size: 20px;
+  margin: auto;
 }
 
 #current {
-  width: 80%;
-  margin-top: 10px;
+  display: block;
   clear: both;
+  width: 1000px;
+  height: 100px;
+  margin-top: 350px;
+  margin: auto;
 }
 
 #finished {
-  width: 80%;
-  margin-top: 10px;
+  display: block;
   clear: both;
+  width: 1000px;
+  height: 100px;
+  margin-top: 50px;
+  margin: auto;
 }
 
 .book {
-  width: 95%;
+  margin-bottom: 20px;
+  width: 90%;
   float: left;
   clear: both;
-  box-sizing: border-box;
-  height: 120px;
+  height: 175px;
   border-radius: 4px;
-  background-color: white;
+  background-color: #f9ece3;
   border: 1px solid gainsboro;
-  margin: 15px;
-  padding: 10px;
   font-size: 1.5em;
   font-weight: 550;
   text-align: left;
+  padding: 10px;
+}
 
-  &:hover {
-    background-color: darken(white, 15);
-  }
-
+.data {
+  width: 50%;
+  float: left;
 }

@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
 import Book from './Book';
+import BookCompleted from './BookCompleted';
 import Form from './Form';
 
-let username = null;
 let currentBooks = [];
 let finishedBooks = [];
 
@@ -17,9 +17,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.updateForm = this.updateForm.bind(this);
-    // this.createBook = this.createBook.bind(this);
+    this.submitForm = this.submitForm.bind(this);
+    this.markComplete = this.markComplete.bind(this);
     this.state = {
-      username: null,
       currentBooks: [],
       finishedBooks: [],
       newTitle: "",
@@ -38,15 +38,45 @@ class App extends Component {
   }
 
   submitForm(event) {
-    let key = event.target.id;
-    let val = event.target.value;
+
+    const book =
+    { title: this.state.newTitle,
+      author: this.state.newAuthor,
+      pages: Number(this.state.newPages),
+      genre: this.state.newGenre
+    };
+
+    fetch('/postBook',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+      }).then(response => response.json())
+      .then((userData) => {
+        let newBooks = this.state.currentBooks;
+        newBooks.unshift(book);
+
     this.setState(
-      { [key]: val }
-    );
+      { newTitle: "",
+        newAuthor: "",
+        newPages: "",
+        newGenre: "",
+        currentBooks: newBooks
+      })
+    });
+  }
+
+  markComplete(event) {
+
   }
 
   componentDidMount() {
     fetchBooks().then((userData) => {
+      console.log(userData._id);
       userData.books.forEach((book) => {
         if (book.status == "In Progress") {
           currentBooks.push(book);
@@ -57,7 +87,6 @@ class App extends Component {
 
       this.setState(Object.assign(
         this.state, {
-          username: username,
           currentBooks: currentBooks,
           finishedBooks: finishedBooks
         }
@@ -70,19 +99,24 @@ class App extends Component {
   render() {
 
     const curBooksDivs = [];
-    this.state.currentBooks.forEach((book) => {
-      curBooksDivs.push(<Book title={book.title} author={book.author} pages={book.pages} />);
+    this.state.currentBooks.forEach((book, i) => {
+      let days;
+      if (book.startDate === undefined) {
+        days = 0;
+      } else {
+        days = Math.round((Date.now()-book.startDate)/(1000*60*60*24));
+      }
+      curBooksDivs.push(<Book title={book.title} author={book.author} pages={book.pages} genre={book.genre} id={i} days={days} markComplete={this.state.markComplete}/>);
     });
 
     const finBooksDivs = [];
-    this.state.finishedBooks.forEach((book) => {
-      finBooksDivs.push(<Book title={book.title} author={book.author} pages={book.pages} />);
+    this.state.finishedBooks.forEach((book, i) => {
+      finBooksDivs.push(<BookCompleted title={book.title} author={book.author} pages={book.pages} genre={book.genre}/>);
     });
 
     return (
       <div id="main">
-        <h1>Add Book</h1>
-        <Form title={this.state.newTitle} author={this.state.newAuthor} pages={this.state.newPages} genre={this.state.newGenre} updateForm={this.updateForm}/>
+        <Form title={this.state.newTitle} author={this.state.newAuthor} pages={this.state.newPages} genre={this.state.newGenre} updateForm={this.updateForm} submitForm={this.submitForm}/>
 
         <div id="current">
           <h1>Currently Reading</h1>

@@ -35,6 +35,8 @@ app.post('/signup', userController.createUser, cookieController.setSSIDCookie, s
 
 app.post('/login', userController.verifyUser, cookieController.setSSIDCookie, sessionController.startSession);
 
+app.use(bodyParser.json());
+
 app.get('/home/:username', sessionController.isLoggedIn, userController.showHome);
 
 app.get('/mybooks', bookController.getBooks)

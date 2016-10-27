@@ -16,6 +16,7 @@ sessionController.isLoggedIn = (req, res, next) => {
 sessionController.startSession = (req, res, next) => {
   let username = req.body.username;
   Session.create({ cookieId: req.cookies.ssid });
+  console.log('startsession');
   res.redirect(`/home/${username}`)
 };
 

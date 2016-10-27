@@ -8,6 +8,7 @@ cookieController.setSSIDCookie = setSSIDCookie;
 
 function setSSIDCookie(req, res, next) {
   res.cookie('ssid', req.body.id, { maxAge: 90000, httpOnly: true});
+  console.log('cookieController');
   next();
 }
 

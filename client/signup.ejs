@@ -1,18 +1,25 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="mystyle.css">
   <title>New User Signup</title>
 </head>
 <body>
-  Signup
+  <div id="content">
+  <div id="top">
+    <div id="img"><img src="dogear.png" /></div>
+    <h1>DogEar</h1>
+    <p>Track your reading habits. Read good stuff.</p>
+  </div>
   <form method='POST' action='/signup'>
     <input name="username" type="text" placeholder="username"></input>
-    <input name="password" type="password"></input>
-    <input type='submit' value='Create User'></button>
+    <input name="password" type="password" placeholder="password"></input>
+    <button type='submit'>Sign Up</button>
     <% if (error) { %>
       <div>  Error </div>
       <div> <%= error %> </div>
     <% } %>
   </form>
+</div>
 </body>
 </html>

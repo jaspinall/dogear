@@ -1,0 +1,51 @@
+body {
+  font-size: 1.5em;
+  font-family: arial;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-image: url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&s=b2c6578bcbf523cb7155dcc894ae32ba');
+}
+
+input {
+  margin: auto;
+  height: 45px;
+  width: 200px;
+  font-size: 1.2em;
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+
+button {
+  height: 50px;
+  width: 200px;
+  font-size: 1.2em;
+  border-radius: 5px;
+  background-color: #ba9983;
+}
+
+#content {
+  margin: auto;
+  padding: 20px;
+  margin-top: 50px;
+  border-radius: 10px;
+  width: 500px;
+  background-color: #f9ece3;
+  height: 550px;
+}
+
+#top {
+  margin-top: 20px;
+  margin: auto;
+  width: 300px;
+}
+
+#img {
+  width: 200px;
+  margin: auto;
+}
+
+#img img {
+  width: 180px;
+}

@@ -9,7 +9,7 @@ const salt = 10;
 const userSchema = new Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true},
-  books: { type: Array, default: [{title: "My Story", author: "An Author", status: "In Progress", startDate: Date.now(), pages: 190, genre: "Fiction"}, {title: "Another Story", author: "Another Author", status: "Not Started", pages: 200, genre: "Non-fiction"}]}
+  books: { type: Array, default: []}
 });
 
 userSchema.pre('save', function (next) {

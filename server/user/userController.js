@@ -37,9 +37,10 @@ userController.verifyUser = (req, res, next) => {
       res.redirect('/signup');
     }
     if (user) {
+      console.log(user);
       let result = user.verify(inputUser.password);
       if (result) {
-        req.body.id = user._id;
+        // req.body.id = user._id;
         next();
       } else {
         res.redirect('/signup');

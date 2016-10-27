@@ -56,7 +56,7 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _application = __webpack_require__(177);
+	var _application = __webpack_require__(178);
 
 	var _application2 = _interopRequireDefault(_application);
 
@@ -21455,7 +21455,11 @@
 
 	var _Book2 = _interopRequireDefault(_Book);
 
-	var _Form = __webpack_require__(176);
+	var _BookCompleted = __webpack_require__(176);
+
+	var _BookCompleted2 = _interopRequireDefault(_BookCompleted);
+
+	var _Form = __webpack_require__(177);
 
 	var _Form2 = _interopRequireDefault(_Form);
 
@@ -21469,7 +21473,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var username = null;
 	var currentBooks = [];
 	var finishedBooks = [];
 
@@ -21489,9 +21492,9 @@
 	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
 	    _this.updateForm = _this.updateForm.bind(_this);
-	    // this.createBook = this.createBook.bind(this);
+	    _this.submitForm = _this.submitForm.bind(_this);
+	    _this.markComplete = _this.markComplete.bind(_this);
 	    _this.state = {
-	      username: null,
 	      currentBooks: [],
 	      finishedBooks: [],
 	      newTitle: "",
@@ -21512,16 +21515,46 @@
 	  }, {
 	    key: 'submitForm',
 	    value: function submitForm(event) {
-	      var key = event.target.id;
-	      var val = event.target.value;
-	      this.setState(_defineProperty({}, key, val));
+	      var _this2 = this;
+
+	      var book = { title: this.state.newTitle,
+	        author: this.state.newAuthor,
+	        pages: Number(this.state.newPages),
+	        genre: this.state.newGenre
+	      };
+
+	      (0, _isomorphicFetch2.default)('/postBook', {
+	        method: 'POST',
+	        credentials: 'include',
+	        headers: {
+	          'Accept': 'application/json',
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(book)
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function (userData) {
+	        var newBooks = _this2.state.currentBooks;
+	        newBooks.unshift(book);
+
+	        _this2.setState({ newTitle: "",
+	          newAuthor: "",
+	          newPages: "",
+	          newGenre: "",
+	          currentBooks: newBooks
+	        });
+	      });
 	    }
+	  }, {
+	    key: 'markComplete',
+	    value: function markComplete(event) {}
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      fetchBooks().then(function (userData) {
+	        console.log(userData._id);
 	        userData.books.forEach(function (book) {
 	          if (book.status == "In Progress") {
 	            currentBooks.push(book);
@@ -21530,8 +21563,7 @@
 	          }
 	        });
 
-	        _this2.setState(Object.assign(_this2.state, {
-	          username: username,
+	        _this3.setState(Object.assign(_this3.state, {
 	          currentBooks: currentBooks,
 	          finishedBooks: finishedBooks
 	        }));
@@ -21540,26 +21572,28 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this4 = this;
 
 	      var curBooksDivs = [];
-	      this.state.currentBooks.forEach(function (book) {
-	        curBooksDivs.push(_react2.default.createElement(_Book2.default, { title: book.title, author: book.author, pages: book.pages }));
+	      this.state.currentBooks.forEach(function (book, i) {
+	        var days = void 0;
+	        if (book.startDate === undefined) {
+	          days = 0;
+	        } else {
+	          days = Math.round((Date.now() - book.startDate) / (1000 * 60 * 60 * 24));
+	        }
+	        curBooksDivs.push(_react2.default.createElement(_Book2.default, { title: book.title, author: book.author, pages: book.pages, genre: book.genre, id: i, days: days, markComplete: _this4.state.markComplete }));
 	      });
 
 	      var finBooksDivs = [];
-	      this.state.finishedBooks.forEach(function (book) {
-	        finBooksDivs.push(_react2.default.createElement(_Book2.default, { title: book.title, author: book.author, pages: book.pages }));
+	      this.state.finishedBooks.forEach(function (book, i) {
+	        finBooksDivs.push(_react2.default.createElement(_BookCompleted2.default, { title: book.title, author: book.author, pages: book.pages, genre: book.genre }));
 	      });
 
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'main' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Add Book'
-	        ),
-	        _react2.default.createElement(_Form2.default, { title: this.state.newTitle, author: this.state.newAuthor, pages: this.state.newPages, genre: this.state.newGenre, updateForm: this.updateForm }),
+	        _react2.default.createElement(_Form2.default, { title: this.state.newTitle, author: this.state.newAuthor, pages: this.state.newPages, genre: this.state.newGenre, updateForm: this.updateForm, submitForm: this.submitForm }),
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'current' },
@@ -22044,7 +22078,7 @@
 /* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22059,29 +22093,64 @@
 	var Book = function Book(props) {
 	  var title = props.title,
 	      author = props.author,
-	      pages = props.pages;
+	      pages = props.pages,
+	      genre = props.genre,
+	      id = props.id,
+	      days = props.days,
+	      markComplete = props.markComplete;
 
+	  var titleLabel = 'Title: ';
+	  var authorLabel = 'Author: ';
+	  var genreLabel = 'Genre: ';
+	  var pagesLabel = 'Page Count: ';
+	  var daysLabel = 'Days Reading: ';
+	  var buttonId = 'button' + id;
 
 	  return _react2.default.createElement(
-	    "div",
-	    { className: "book" },
+	    'div',
+	    { className: 'book' },
 	    _react2.default.createElement(
-	      "div",
-	      { className: "title" },
-	      "'Title: '",
-	      title
+	      'div',
+	      { className: 'data' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'title' },
+	        titleLabel,
+	        title
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'author' },
+	        titleLabel,
+	        author
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'genre' },
+	        genreLabel,
+	        genre
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'pages' },
+	        pagesLabel,
+	        pages
+	      )
 	    ),
 	    _react2.default.createElement(
-	      "div",
-	      { className: "author" },
-	      "Author:",
-	      author
-	    ),
-	    _react2.default.createElement(
-	      "div",
-	      { className: "pages" },
-	      "Page Count:",
-	      pages
+	      'div',
+	      { className: 'stats' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'DaysTracker' },
+	        daysLabel,
+	        days
+	      ),
+	      _react2.default.createElement(
+	        'button',
+	        { className: 'finishReading', id: buttonId, onClick: markComplete },
+	        'Mark as Complete'
+	      )
 	    )
 	  );
 	};
@@ -22090,6 +22159,71 @@
 
 /***/ },
 /* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var BookCompleted = function BookCompleted(props) {
+	  var title = props.title,
+	      author = props.author,
+	      pages = props.pages,
+	      genre = props.genre,
+	      id = props.id,
+	      days = props.days;
+
+	  var titleLabel = 'Title: ';
+	  var authorLabel = 'Author: ';
+	  var genreLabel = 'Genre: ';
+	  var pagesLabel = 'Page Count: ';
+
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'book', id: id },
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'data' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'title' },
+	        titleLabel,
+	        title
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'author' },
+	        titleLabel,
+	        author
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'genre' },
+	        genreLabel,
+	        genre
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'pages' },
+	        pagesLabel,
+	        pages
+	      )
+	    )
+	  );
+	};
+
+	exports.default = BookCompleted;
+
+/***/ },
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22109,36 +22243,41 @@
 	      author = props.author,
 	      pages = props.pages,
 	      genre = props.genre,
-	      updateForm = props.updateForm;
+	      updateForm = props.updateForm,
+	      submitForm = props.submitForm;
 
 
 	  return _react2.default.createElement(
 	    "div",
 	    { id: "form" },
-	    _react2.default.createElement("input", { type: "text",
-	      id: "newTitle",
-	      placeholder: "title",
-	      value: title,
-	      onChange: updateForm }),
-	    _react2.default.createElement("input", { type: "text",
-	      id: "newAuthor",
-	      placeholder: "author",
-	      value: author,
-	      onChange: updateForm }),
-	    _react2.default.createElement("input", { type: "text",
-	      id: "newPages",
-	      placeholder: "pages",
-	      value: pages,
-	      onChange: updateForm }),
-	    _react2.default.createElement("input", { type: "text",
-	      id: "newGenre",
-	      placeholder: "genre",
-	      value: genre,
-	      onChange: updateForm }),
 	    _react2.default.createElement(
-	      "button",
-	      { onClick: "" },
-	      "Submit"
+	      "div",
+	      { id: "formElements" },
+	      _react2.default.createElement("input", { type: "text",
+	        id: "newTitle",
+	        placeholder: "title",
+	        value: title,
+	        onChange: updateForm }),
+	      _react2.default.createElement("input", { type: "text",
+	        id: "newAuthor",
+	        placeholder: "author",
+	        value: author,
+	        onChange: updateForm }),
+	      _react2.default.createElement("input", { type: "text",
+	        id: "newPages",
+	        placeholder: "pages",
+	        value: pages,
+	        onChange: updateForm }),
+	      _react2.default.createElement("input", { type: "text",
+	        id: "newGenre",
+	        placeholder: "genre",
+	        value: genre,
+	        onChange: updateForm }),
+	      _react2.default.createElement(
+	        "button",
+	        { onClick: submitForm },
+	        "Add New Book"
+	      )
 	    )
 	  );
 	};
@@ -22146,16 +22285,16 @@
 	exports.default = Form;
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(178);
+	var content = __webpack_require__(179);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(180)(content, {});
+	var update = __webpack_require__(181)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22172,21 +22311,21 @@
 	}
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(179)();
+	exports = module.exports = __webpack_require__(180)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "body {\n  background: #ACCEEC;\n  font-family: Helvetica, arial, sans-serif; }\n\n#main {\n  width: 90%;\n  margin: 20px auto;\n  padding: 0; }\n\n#form {\n  width: 80%;\n  margin: auto;\n  margin-bottom: 20px;\n  float: left;\n  clear: both;\n  background-color: lightGrey;\n  padding: 10px; }\n\ninput, button {\n  height: 20px;\n  font-size: 1.2em;\n  float: left;\n  clear: both;\n  margin: 5px; }\n\nbutton {\n  height: 30px;\n  font-size: 1.2em;\n  float: left;\n  margin: 10px; }\n\n#current {\n  width: 80%;\n  margin-top: 10px;\n  clear: both; }\n\n#finished {\n  width: 80%;\n  margin-top: 10px;\n  clear: both; }\n\n.book {\n  width: 95%;\n  float: left;\n  clear: both;\n  box-sizing: border-box;\n  height: 120px;\n  border-radius: 4px;\n  background-color: white;\n  border: 1px solid gainsboro;\n  margin: 15px;\n  padding: 10px;\n  font-size: 1.5em;\n  font-weight: 550;\n  text-align: left; }\n  .book:hover {\n    background-color: #d9d9d9; }\n", ""]);
+	exports.push([module.id, "body {\n  margin: 0;\n  padding: 0;\n  background-color: #ba9983;\n  font-family: Arial;\n  color: #3d1f0c; }\n\n#main {\n  width: 900px;\n  margin-top: 50px;\n  margin: auto;\n  padding-top: 50px; }\n\n#form {\n  margin-top: 50px;\n  width: 300px;\n  margin: auto;\n  margin-bottom: 20px;\n  float: right;\n  clear: both;\n  background-color: #f9ece3;\n  padding: 10px;\n  border-radius: 10px; }\n\n#formElements {\n  width: 280px;\n  margin: auto; }\n\ninput {\n  width: 250px;\n  border-radius: 3px;\n  height: 30px;\n  font-size: 1.2em;\n  margin: auto;\n  margin-bottom: 10px; }\n\nbutton {\n  background-color: #ba9983;\n  border-radius: 3px;\n  height: 30px;\n  width: 250px;\n  font-size: 20px;\n  margin: auto; }\n\n#current {\n  display: block;\n  clear: both;\n  width: 1000px;\n  height: 100px;\n  margin-top: 350px;\n  margin: auto; }\n\n#finished {\n  display: block;\n  clear: both;\n  width: 1000px;\n  height: 100px;\n  margin-top: 50px;\n  margin: auto; }\n\n.book {\n  margin-bottom: 20px;\n  width: 90%;\n  float: left;\n  clear: both;\n  height: 175px;\n  border-radius: 4px;\n  background-color: #f9ece3;\n  border: 1px solid gainsboro;\n  font-size: 1.5em;\n  font-weight: 550;\n  text-align: left;\n  padding: 10px; }\n\n.data {\n  width: 50%;\n  float: left; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports) {
 
 	/*
@@ -22242,7 +22381,7 @@
 
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

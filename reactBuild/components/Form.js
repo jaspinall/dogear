@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 
 const Form = (props) => {
-  const { title, author, pages, genre, updateForm } = props;
+  const { title, author, pages, genre, updateForm, submitForm } = props;
 
   return (
     <div id="form">
+    <div id="formElements">
       <input type="text"
         id="newTitle"
         placeholder="title"
@@ -25,7 +26,8 @@ const Form = (props) => {
         placeholder="genre"
         value={genre}
         onChange={updateForm}/>
-      <button onClick="">Submit</button>
+      <button onClick={submitForm}>Add New Book</button>
+      </div>
     </div>
   );
 
