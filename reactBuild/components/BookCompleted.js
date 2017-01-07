@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
-const BookCompleted= (props) => {
+const BookCompleted = (props) => {
   const { title, author, pages, genre, id, days } = props;
   const titleLabel = 'Title: ';
   const authorLabel = 'Author: ';
@@ -11,12 +11,12 @@ const BookCompleted= (props) => {
     <div className="book" id={id}>
       <div className="data">
         <div className="title">{titleLabel}{title}</div>
-        <div className="author">{titleLabel}{author}</div>
+        <div className="author">{authorLabel}{author}</div>
         <div className="genre">{genreLabel}{genre}</div>
         <div className="pages">{pagesLabel}{pages}</div>
       </div>
     </div>
-  )
+  );
 };
 
 export default BookCompleted;

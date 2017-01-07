@@ -1,10 +1,8 @@
-'use strict';
-
 const Session = require('./sessionModel');
-const User = require('../user/userModel');
 
 const sessionController = {};
 
+// If a user attempts to go directly to the homepage, checks whether they have already logged in
 sessionController.isLoggedIn = (req, res, next) => {
   if (req.cookies.ssid) {
     next();
@@ -13,11 +11,11 @@ sessionController.isLoggedIn = (req, res, next) => {
   }
 };
 
-sessionController.startSession = (req, res, next) => {
-  let username = req.body.username;
+// Creates a session in the database for a new user
+sessionController.startSession = (req, res) => {
+  const username = req.body.username;
   Session.create({ cookieId: req.cookies.ssid });
-  console.log('startsession');
-  res.redirect(`/home/${username}`)
+  res.redirect(`/home/${username}`);
 };
 
 module.exports = sessionController;

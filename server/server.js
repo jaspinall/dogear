@@ -1,7 +1,4 @@
-'use strict';
-
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
@@ -22,13 +19,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('client'));
 
-//Routes
+// Routes
 app.get('/', (req, res) => {
   res.render('./../client/index');
 });
 
 app.get('/signup', (req, res) => {
-  res.render('./../client/signup', {error: null});
+  res.render('./../client/signup', { error: null });
 });
 
 app.post('/signup', userController.createUser, cookieController.setSSIDCookie, sessionController.startSession);
@@ -39,7 +36,7 @@ app.use(bodyParser.json());
 
 app.get('/home/:username', sessionController.isLoggedIn, userController.showHome);
 
-app.get('/mybooks', bookController.getBooks)
+app.get('/mybooks', bookController.getBooks);
 
 app.post('/postBook', bookController.updateBooks);
 

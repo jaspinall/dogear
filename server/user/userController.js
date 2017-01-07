@@ -1,19 +1,12 @@
-'use strict';
-
 const User = require('./userModel');
-const cookieController = require('./../util/cookieController');
-const sessionController = require('./../session/sessionController');
-const bookController = require('./../books/bookController');
+
 const userController = {};
 
-userController.getAllUsers = (next) => {
-  User.find({}, next);
-};
-
+// Creates new user in the database upon signup
 userController.createUser = (req, res, next) => {
   const newUser = {
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   };
   User.create(newUser, (err, user) => {
     if (err) {
@@ -24,26 +17,19 @@ userController.createUser = (req, res, next) => {
       next();
     }
   });
-
 };
 
+// Verifies a user's credentials upon login
 userController.verifyUser = (req, res, next) => {
   const inputUser = {
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   };
   User.findOne({ username: inputUser.username }, (err, user) => {
-    if (err) {
-      res.redirect('/signup');
-    }
     if (user) {
-      console.log(user);
-      let result = user.verify(inputUser.password);
+      const result = user.verify(inputUser.password);
       if (result) {
-        // req.body.id = user._id;
         next();
-      } else {
-        res.redirect('/signup');
       }
     } else {
       res.redirect('/signup');
@@ -51,18 +37,17 @@ userController.verifyUser = (req, res, next) => {
   });
 };
 
-userController.showHome = (req, res, next) => {
-  var username = req.params.username;
-  User.findOne( { username: username}, (err, user) => {
+// Shows the user the home page if he/she has a cookie
+userController.showHome = (req, res) => {
+  User.findOne({ username: req.params.username }, (err) => {
     if (err) {
       res.render('./../client/signup', { error: err });
       res.end();
     } else {
-      const username = user.username;
-      res.render('./../client/home')
-      next();
+      res.render('./../client/home');
+      res.end();
     }
-  })
-}
+  });
+};
 
 module.exports = userController;

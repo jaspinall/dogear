@@ -6,7 +6,7 @@ const User = require('./../server/user/userModel');
 const bcrypt = require('bcryptjs');
 const sinon = require('sinon');
 
-describe('Unit 10 Tests', () => {
+describe('Authentication and routing should function properly', () => {
 
   let id;
   let clock;
@@ -27,11 +27,8 @@ describe('Unit 10 Tests', () => {
           id = user.id;
           done();
         });
-
       });
     });
-
-
   });
 
   after(() => {
@@ -117,81 +114,6 @@ describe('Unit 10 Tests', () => {
 
   });
 
-  describe('Cookies', () => {
-
-    it('Header has cookie name of "codesmith"', (done) => {
-      request
-        .get('/')
-        .expect('set-cookie',/codesmith=/, done);
-    });
-
-    it('"codesmith" cookie has value of "hi"', (done) => {
-      request
-        .get('/')
-        .expect('set-cookie',/hi/, done);
-    });
-
-    it('Header has a cookie name "secret"', (done) => {
-      request
-        .get('/')
-        .expect('set-cookie', /secret=/, done);
-    });
-
-    it('"secret" cookie has a random value from 0-99', (done) => {
-      let oldNumber;
-      let newNumber;
-      let cookies;
-      request
-        .get('/')
-        .end((err, res) => {
-          oldNumber = getCookie(res.headers['set-cookie'],'secret');
-          request
-            .get('/')
-            .end((err, res) => {
-              newNumber = getCookie(res.headers['set-cookie'],'secret');
-              expect(newNumber).to.be.within(0,99);
-              expect(oldNumber).to.be.within(0,99);
-              expect(newNumber).to.not.eql(oldNumber);
-              done();
-            });
-        });
-    });
-
-    it('Header has a cookie named "ssid" when a user successfully logins', (done) => {
-      request
-        .post('/login')
-        .type('form')
-        .send({ username: 'david', password: 'aight' })
-        .expect('set-cookie', /ssid=/, done);
-    });
-
-    it('"ssid" cookie is HttpOnly', (done) => {
-      request
-        .post('/login')
-        .type('form')
-        .send({ username: 'david', password: 'aight' })
-        .expect('set-cookie', /HttpOnly/, done);
-    });
-
-    it('Header has a cookie named "ssid" when a user successfully signs up', (done) => {
-      request
-        .post('/signup')
-        .type('form')
-        .send({ username: 'newuser', password: 'cool' })
-        .expect('set-cookie', /ssid=/, done);
-    });
-
-    it('"ssid" cookie has value of user', (done) => {
-      const regex = new RegExp(id);
-      request
-        .post('/login')
-        .type('form')
-        .send({ username: 'david', password : 'aight' })
-        .expect('set-cookie', regex, done);
-    });
-
-  });
-
   describe('Sessions', () => {
 
     it('Creates a session when a user successfully creates an account', (done) => {
@@ -241,70 +163,6 @@ describe('Unit 10 Tests', () => {
           });
         });
     });
-
-  });
-
-  describe('Authorizing users', () => {
-
-    it('Block "/secret" if session not active', (done) => {
-     request
-       .get('/secret')
-       .end((err, res) => {
-        expect(res.text).to.not.include('Secret');
-        expect(res.text).to.not.include('david');
-        done();
-       });
-    });
-
-    it('Redirects from "/secret" to "/signup" if session not active', (done) => {
-     request
-       .get('/secret')
-       .expect(302)
-       .end((err, res) => {
-        expect(res.headers.location).to.eql('/signup');
-        done();
-       });
-    });
-
-    it('Allows access to "/secret" if session active', (done) => {
-      request
-        .post('/login')
-        .type('form')
-        .send({ username: 'david', password: 'aight' })
-        .end((err, res) => {
-          const cookie = res.headers['set-cookie'][0].split(';')[0];
-
-          request
-            .get('/secret')
-            .set('Cookie', cookie)
-            .expect(200)
-            .end((err, res) => {
-              expect(res.text).to.contain('Secret');
-              expect(res.text).to.contain('david');
-              done(err);
-            });
-        });
-    });
-
-    it('Should not be able to access "/secret" after session expires', (done) => {
-      request
-        .post('/login')
-        .type('form')
-        .send({ username: 'david', password: 'aight' })
-        .end((err, res) => {
-          Session.remove({ cookieId: id }, (err, session) => {
-
-            request
-              .get('/secret')
-              .expect(302)
-              .end((err, res) => {
-                expect(res.headers.location).to.eql('/signup');
-                done();
-              });
-          });
-        });
-    });
-
   });
 
   describe('Bcrypting passwords', () => {
@@ -342,17 +200,5 @@ describe('Unit 10 Tests', () => {
         done();
       });
     });
-
   });
-
 });
-
-function getCookieValue(cookie) {
-  return cookie[0].split(';')[0].split('=')[1];
-}
-
-function getCookie(cookieArray, name) {
-  return getCookieValue(cookieArray.filter((el) => {
-    return el.split(';')[0].split('=')[0] === name;
-  }));
-}
