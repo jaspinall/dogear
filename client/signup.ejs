@@ -8,14 +8,14 @@
 <body>
   <div id="content">
   <div id="top">
-    <div id="img"><img src="dogear.png" /></div>
+    <div id="img"><img src="./images/dogear.png" /></div>
     <h1>DogEar</h1>
     <p>Track your reading habits. Read good stuff.</p>
   </div>
   <form method='POST' action='/signup'>
     <input name="username" type="text" placeholder="username"></input>
     <input name="password" type="password" placeholder="password"></input>
-    <button type='submit'>Sign Up</button>
+    <button type='submit'>sign up</button>
     <% if (error) { %>
       <div>  Error </div>
       <div> <%= error %> </div>

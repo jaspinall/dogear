@@ -41,7 +41,7 @@ const Form = (props) => {
           value={image}
           onChange={updateForm}
         />
-      <button onClick={submitForm}>add new book</button>
+      <button className="formButton" onClick={submitForm}>add new book</button>
       </div>
     </div>
   );

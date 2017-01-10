@@ -13,17 +13,15 @@ const Book = (props) => {
     <div className="book">
       <div className="bookImg"><img src={image}></img></div>
       <div className="data">
-        <div className="title">{titleLabel}{title}</div>
-        <div className="author">{authorLabel}{author}</div>
-        <div className="genre">{genreLabel}{genre}</div>
-        <div className="pages">{pagesLabel}{pages}</div>
+        <div className="title"><span className="label">{titleLabel}</span>{title}</div>
+        <div className="author"><span className="label">{authorLabel}</span>{author}</div>
+        <div className="genre"><span className="label">{genreLabel}</span>{genre}</div>
+        <div className="pages"><span className="label">{pagesLabel}</span>{pages}</div>
+        <div className="daysTracker"><span className="label">{daysLabel}</span>{days}</div>
       </div>
-      <div className="stats">
-        <div className="DaysTracker">{daysLabel}{days}</div>
-        <button className="finishReading" id={buttonId} onClick={markComplete}>
-          Mark as Complete
+        <button className="complete" id={buttonId} onClick={markComplete}>
+          &#10003; complete
         </button>
-      </div>
     </div>
   );
 };

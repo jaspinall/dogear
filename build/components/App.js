@@ -137,12 +137,16 @@ class App extends Component {
           />
         </div>
         <div className="row">
-          <h1>books in progress</h1>
-          {curBooksDivs}
+          <div className="books">
+            <h1>books in progress</h1>
+            {curBooksDivs}
+          </div>
         </div>
         <div className="row">
-          <h1>completed books</h1>
-          {finBooksDivs}
+          <div className="books">
+            <h1>completed books</h1>
+            {finBooksDivs}
+          </div>
         </div>
       </div>
     );

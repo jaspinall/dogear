@@ -21690,21 +21690,29 @@
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h1',
-	            null,
-	            'books in progress'
-	          ),
-	          curBooksDivs
+	            'div',
+	            { className: 'books' },
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              'books in progress'
+	            ),
+	            curBooksDivs
+	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h1',
-	            null,
-	            'completed books'
-	          ),
-	          finBooksDivs
+	            'div',
+	            { className: 'books' },
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              'completed books'
+	            ),
+	            finBooksDivs
+	          )
 	        )
 	      );
 	    }
@@ -21762,42 +21770,58 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'title' },
-	        titleLabel,
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'label' },
+	          titleLabel
+	        ),
 	        title
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'author' },
-	        authorLabel,
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'label' },
+	          authorLabel
+	        ),
 	        author
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'genre' },
-	        genreLabel,
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'label' },
+	          genreLabel
+	        ),
 	        genre
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'pages' },
-	        pagesLabel,
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'label' },
+	          pagesLabel
+	        ),
 	        pages
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'daysTracker' },
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'label' },
+	          daysLabel
+	        ),
+	        days
 	      )
 	    ),
 	    _react2.default.createElement(
-	      'div',
-	      { className: 'stats' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'DaysTracker' },
-	        daysLabel,
-	        days
-	      ),
-	      _react2.default.createElement(
-	        'button',
-	        { className: 'finishReading', id: buttonId, onClick: markComplete },
-	        'Mark as Complete'
-	      )
+	      'button',
+	      { className: 'complete', id: buttonId, onClick: markComplete },
+	      '\u2713 complete'
 	    )
 	  );
 	};
@@ -21944,7 +21968,7 @@
 	      }),
 	      _react2.default.createElement(
 	        "button",
-	        { onClick: submitForm },
+	        { className: "formButton", onClick: submitForm },
 	        "add new book"
 	      )
 	    )
@@ -22062,7 +22086,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\n  margin: 0;\n  padding: 0;\n  background-color: #dcd0c0;\n  font-family: 'Josefin Sans', sans-serif;\n  color: #373737;\n  font-size: 1.5em; }\n\n#main {\n  width: 100%;\n  margin: 0;\n  padding: 0; }\n\n#title {\n  background: url(" + __webpack_require__(186) + ") no-repeat;\n  height: 200px;\n  width: 100%;\n  color: #c0b283;\n  font-style: italic;\n  font-size: 1.5em;\n  padding: 30px;\n  margin: 0; }\n\n#title h1 {\n  margin-top: 150px; }\n\n#form {\n  width: 400px;\n  margin-top: 30px;\n  margin-left: 50px;\n  float: left;\n  background-color: #f4f4f4;\n  font-family: 'Josefin Sans', sans-serif;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 2px 2px 5px #373737; }\n\n#formElements {\n  width: 360px;\n  margin: auto; }\n\ninput {\n  font-family: 'Josefin Sans', sans-serif;\n  width: 350px;\n  border-radius: 3px;\n  height: 30px;\n  font-size: 1.2em;\n  margin: auto;\n  margin-bottom: 10px; }\n\nbutton {\n  font-family: 'Josefin Sans', sans-serif;\n  background-color: #c0b283;\n  border-radius: 5px;\n  height: 50px;\n  width: 360px;\n  font-size: 20px;\n  margin: auto;\n  font-size: 1.2em;\n  box-shadow: 2px 2px 5px #373737;\n  border: none;\n  margin-top: 10px; }\n\nbutton:hover,\nbutton:active,\nbutton:focus,\ninput:active,\ninput:focus {\n  outline: none; }\n\n.book {\n  width: 400px;\n  margin-top: 20px;\n  margin-left: 20px;\n  float: left;\n  background-color: #f4f4f4;\n  font-family: 'Josefin Sans', sans-serif;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 2px 2px 5px #373737; }\n\n.bookImg {\n  width: 250px;\n  margin: auto; }\n\n.bookImg img {\n  width: 250px; }\n\n.data {\n  width: 50%;\n  float: left; }\n\n.row {\n  width: 100%;\n  margin: 0;\n  padding: 20px;\n  height: 300px; }\n\n#dashboard {\n  width: 400px;\n  margin-top: 20px;\n  margin-left: 20px;\n  float: left; }\n", ""]);
+	exports.push([module.id, "body {\n  margin: 0;\n  padding: 0;\n  background-color: #dcd0c0;\n  font-family: 'Josefin Sans', sans-serif;\n  color: #373737;\n  font-size: 1.5em; }\n\n#main {\n  width: 100%;\n  margin: 0;\n  padding: 0; }\n\n#title {\n  background: url(" + __webpack_require__(186) + ") no-repeat;\n  height: 200px;\n  width: 100%;\n  color: #c0b283;\n  font-style: italic;\n  font-size: 1.5em;\n  padding: 30px;\n  margin: 0; }\n\n#title h1 {\n  margin-top: 150px; }\n\n#form {\n  width: 400px;\n  margin-top: 55px;\n  margin-left: 50px;\n  float: left;\n  background-color: #f4f4f4;\n  font-family: 'Josefin Sans', sans-serif;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 2px 2px 5px #373737; }\n\n#formElements {\n  width: 360px;\n  margin: auto; }\n\ninput {\n  font-family: 'Josefin Sans', sans-serif;\n  width: 355px;\n  border-radius: 5px;\n  height: 35px;\n  font-size: 1.2em;\n  margin: auto;\n  margin-bottom: 10px; }\n\nbutton {\n  font-family: 'Josefin Sans', sans-serif;\n  background-color: #c0b283;\n  border-radius: 5px;\n  font-size: 20px;\n  margin: auto;\n  font-size: 1.2em;\n  box-shadow: 2px 2px 5px #373737;\n  border: none;\n  margin-top: 10px; }\n\n.formButton {\n  height: 50px;\n  width: 360px;\n  margin: auto; }\n\n.complete {\n  width: 180px;\n  float: left;\n  margin-left: 10px;\n  margin-top: 0px; }\n\nbutton:hover,\nbutton:active,\nbutton:focus,\ninput:active,\ninput:focus {\n  outline: none; }\n\n.book {\n  width: 400px;\n  margin-top: 20px;\n  margin-right: 20px;\n  float: left;\n  background-color: #f4f4f4;\n  font-family: 'Josefin Sans', sans-serif;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 2px 2px 5px #373737; }\n\n.bookImg {\n  width: 200px;\n  height: 300px;\n  margin: auto; }\n\n.bookImg img {\n  width: 200px;\n  height: 300px; }\n\n.row {\n  width: 100%;\n  margin: 0;\n  padding: 20px;\n  height: 400px;\n  clear: both; }\n\n#dashboard {\n  width: 400px;\n  margin-left: 20px;\n  float: left;\n  font-size: 1.2em; }\n\n.books {\n  margin-left: 20px; }\n\n.title, .author, .genre, .pages, .daysTracker {\n  float: left;\n  padding: 10px;\n  width: 160px;\n  text-align: left;\n  height: 2.5em; }\n\n.data {\n  margin-top: 10px;\n  width: 360px;\n  margin: auto; }\n\n.label {\n  width: 180px; }\n", ""]);
 
 	// exports
 

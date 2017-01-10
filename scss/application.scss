@@ -30,7 +30,7 @@ body {
 
 #form {
   width: 400px;
-  margin-top: 30px;
+  margin-top: 55px;
   margin-left: 50px;
   float: left;
   background-color: #f4f4f4;
@@ -47,9 +47,9 @@ body {
 
 input {
   font-family: 'Josefin Sans', sans-serif;
-  width: 350px;
-  border-radius: 3px;
-  height: 30px;
+  width: 355px;
+  border-radius: 5px;
+  height: 35px;
   font-size: 1.2em;
   margin: auto;
   margin-bottom: 10px;
@@ -59,14 +59,25 @@ button {
   font-family: 'Josefin Sans', sans-serif;
   background-color: #c0b283;
   border-radius: 5px;
-  height: 50px;
-  width: 360px;
   font-size: 20px;
   margin: auto;
   font-size: 1.2em;
   box-shadow: 2px 2px 5px #373737;
   border: none;
   margin-top: 10px;
+}
+
+.formButton {
+  height: 50px;
+  width: 360px;
+  margin: auto;
+}
+
+.complete {
+  width: 180px;
+  float: left;
+  margin-left: 10px;
+  margin-top: 0px;
 }
 
 button:hover,
@@ -80,7 +91,7 @@ input:focus {
 .book {
   width: 400px;
   margin-top: 20px;
-  margin-left: 20px;
+  margin-right: 20px;
   float: left;
   background-color: #f4f4f4;
   font-family: 'Josefin Sans', sans-serif;
@@ -90,29 +101,49 @@ input:focus {
 }
 
 .bookImg {
-  width: 250px;
+  width: 200px;
+  height: 300px;
   margin: auto;
 }
 
 .bookImg img {
-  width: 250px;
-}
-
-.data {
-  width: 50%;
-  float: left;
+  width: 200px;
+  height: 300px;
 }
 
 .row {
   width: 100%;
   margin: 0;
   padding: 20px;
-  height: 300px;
+  height: 400px;
+  clear: both;
 }
 
 #dashboard {
   width: 400px;
-  margin-top: 20px;
   margin-left: 20px;
   float: left;
+  font-size: 1.2em;
+}
+
+.books {
+  margin-left: 20px;
+}
+
+.title, .author, .genre, .pages, .daysTracker {
+  float: left;
+  padding: 10px;
+  width: 160px;
+  text-align: left;
+  height: 2.5em;
+}
+
+.data {
+  margin-top: 10px;
+  width: 360px;
+  margin: auto;
+}
+
+.label {
+  width: 180px;
 }
