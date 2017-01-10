@@ -1,4 +1,4 @@
-# Dogear
+# DogEar
 Track your reading habits. Read good stuff.
 
 ## Summary
