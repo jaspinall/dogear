@@ -56,11 +56,9 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _application = __webpack_require__(184);
-
-	var _application2 = _interopRequireDefault(_application);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(183);
 
 	(0, _reactDom.render)(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
 
@@ -21503,45 +21501,37 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _isomorphicFetch = __webpack_require__(179);
-
-	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Book = __webpack_require__(181);
+	var _Book = __webpack_require__(179);
 
 	var _Book2 = _interopRequireDefault(_Book);
 
-	var _BookCompleted = __webpack_require__(182);
+	var _BookCompleted = __webpack_require__(180);
 
 	var _BookCompleted2 = _interopRequireDefault(_BookCompleted);
 
-	var _Form = __webpack_require__(183);
+	var _Form = __webpack_require__(181);
 
 	var _Form2 = _interopRequireDefault(_Form);
+
+	var _Dashboard = __webpack_require__(182);
+
+	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var currentBooks = [];
-	var finishedBooks = [];
-
-	//Returns a promise object with user data
-	function fetchBooks() {
-	  return (0, _isomorphicFetch2.default)('/mybooks', { credentials: 'include' }).then(function (response) {
-	    return response.json();
-	  });
-	}
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -21553,19 +21543,80 @@
 
 	    _this.updateForm = _this.updateForm.bind(_this);
 	    _this.submitForm = _this.submitForm.bind(_this);
-	    _this.markComplete = _this.markComplete.bind(_this);
 	    _this.state = {
 	      currentBooks: [],
 	      finishedBooks: [],
-	      newTitle: "",
-	      newAuthor: "",
-	      newPages: "",
-	      newGenre: ""
+	      newTitle: '',
+	      newAuthor: '',
+	      newPages: '',
+	      newGenre: '',
+	      newImage: ''
 	    };
 	    return _this;
 	  }
 
 	  _createClass(App, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      var currentBooks = [];
+	      var finishedBooks = [];
+	      // Fetches the current book list for the authenticated user and displays results.
+	      fetch('/mybooks', { credentials: 'include' }).then(function (response) {
+	        return response.json();
+	      }).then(function (userData) {
+	        // Iterates through a user's books. Divides them into 'current' or 'finished' based on status
+	        userData.books.forEach(function (book) {
+	          if (book.status === 'In Progress') {
+	            currentBooks.push(book);
+	          } else {
+	            finishedBooks.push(book);
+	          }
+	        });
+	        // Sets state with books from database to update UI
+	        _this2.setState(Object.assign(_this2.state, { currentBooks: currentBooks, finishedBooks: finishedBooks }));
+	      });
+	    }
+	  }, {
+	    key: 'submitForm',
+	    value: function submitForm() {
+	      var _this3 = this;
+
+	      var book = {
+	        title: this.state.newTitle,
+	        author: this.state.newAuthor,
+	        pages: Number(this.state.newPages),
+	        genre: this.state.newGenre,
+	        image: this.state.newImage
+	      };
+
+	      // Adds form data to the database via the 'postbook' route
+	      fetch('/postBook', {
+	        method: 'POST',
+	        credentials: 'include',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(book)
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function () {
+	        // Updates the UI with the submitted book after it has been stored in the DB
+	        var newBooks = [].concat(_toConsumableArray(_this3.state.currentBooks), [book]);
+	        _this3.setState({ newTitle: '',
+	          newAuthor: '',
+	          newPages: '',
+	          newGenre: '',
+	          newImage: '',
+	          currentBooks: newBooks
+	        });
+	      });
+	    }
+
+	    // Handles keypress events in the input fields
+
+	  }, {
 	    key: 'updateForm',
 	    value: function updateForm(event) {
 	      var key = event.target.id;
@@ -21573,67 +21624,9 @@
 	      this.setState(_defineProperty({}, key, val));
 	    }
 	  }, {
-	    key: 'submitForm',
-	    value: function submitForm(event) {
-	      var _this2 = this;
-
-	      var book = { title: this.state.newTitle,
-	        author: this.state.newAuthor,
-	        pages: Number(this.state.newPages),
-	        genre: this.state.newGenre
-	      };
-
-	      (0, _isomorphicFetch2.default)('/postBook', {
-	        method: 'POST',
-	        credentials: 'include',
-	        headers: {
-	          'Accept': 'application/json',
-	          'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(book)
-	      }).then(function (response) {
-	        return response.json();
-	      }).then(function (userData) {
-	        var newBooks = _this2.state.currentBooks;
-	        newBooks.unshift(book);
-
-	        _this2.setState({ newTitle: "",
-	          newAuthor: "",
-	          newPages: "",
-	          newGenre: "",
-	          currentBooks: newBooks
-	        });
-	      });
-	    }
-	  }, {
-	    key: 'markComplete',
-	    value: function markComplete(event) {}
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this3 = this;
-
-	      fetchBooks().then(function (userData) {
-	        console.log(userData._id);
-	        userData.books.forEach(function (book) {
-	          if (book.status == "In Progress") {
-	            currentBooks.push(book);
-	          } else {
-	            finishedBooks.push(book);
-	          }
-	        });
-
-	        _this3.setState(Object.assign(_this3.state, {
-	          currentBooks: currentBooks,
-	          finishedBooks: finishedBooks
-	        }));
-	      });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
-
+	      // Generate array of current book divs
 	      var curBooksDivs = [];
 	      this.state.currentBooks.forEach(function (book, i) {
 	        var days = void 0;
@@ -21642,35 +21635,74 @@
 	        } else {
 	          days = Math.round((Date.now() - book.startDate) / (1000 * 60 * 60 * 24));
 	        }
-	        curBooksDivs.push(_react2.default.createElement(_Book2.default, { title: book.title, author: book.author, pages: book.pages, genre: book.genre, id: i, days: days, markComplete: _this4.state.markComplete }));
+	        curBooksDivs.push(_react2.default.createElement(_Book2.default, {
+	          title: book.title,
+	          author: book.author,
+	          pages: book.pages,
+	          genre: book.genre,
+	          image: book.image,
+	          key: 'book' + i,
+	          id: i,
+	          days: days
+	        }));
 	      });
 
+	      // Generate array of finished book divs
 	      var finBooksDivs = [];
 	      this.state.finishedBooks.forEach(function (book, i) {
-	        finBooksDivs.push(_react2.default.createElement(_BookCompleted2.default, { title: book.title, author: book.author, pages: book.pages, genre: book.genre }));
+	        finBooksDivs.push(_react2.default.createElement(_BookCompleted2.default, {
+	          title: book.title,
+	          author: book.author,
+	          pages: book.pages,
+	          genre: book.genre,
+	          image: book.image,
+	          key: 'bookComplete' + i
+	        }));
 	      });
 
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'main' },
-	        _react2.default.createElement(_Form2.default, { title: this.state.newTitle, author: this.state.newAuthor, pages: this.state.newPages, genre: this.state.newGenre, updateForm: this.updateForm, submitForm: this.submitForm }),
 	        _react2.default.createElement(
 	          'div',
-	          { id: 'current' },
+	          { id: 'title' },
 	          _react2.default.createElement(
 	            'h1',
 	            null,
-	            'Currently Reading'
+	            'what will you read today?'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(_Dashboard2.default, null),
+	          _react2.default.createElement(_Form2.default, {
+	            title: this.state.newTitle,
+	            author: this.state.newAuthor,
+	            pages: this.state.newPages,
+	            genre: this.state.newGenre,
+	            image: this.state.newImage,
+	            updateForm: this.updateForm,
+	            submitForm: this.submitForm
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            'books in progress'
 	          ),
 	          curBooksDivs
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { id: 'finished' },
+	          { className: 'row' },
 	          _react2.default.createElement(
 	            'h1',
 	            null,
-	            'Read Earlier This Year'
+	            'completed books'
 	          ),
 	          finBooksDivs
 	        )
@@ -21687,482 +21719,6 @@
 /* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// the whatwg-fetch polyfill installs the fetch() function
-	// on the global object (window or self)
-	//
-	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(180);
-	module.exports = self.fetch.bind(self);
-
-
-/***/ },
-/* 180 */
-/***/ function(module, exports) {
-
-	(function(self) {
-	  'use strict';
-
-	  if (self.fetch) {
-	    return
-	  }
-
-	  var support = {
-	    searchParams: 'URLSearchParams' in self,
-	    iterable: 'Symbol' in self && 'iterator' in Symbol,
-	    blob: 'FileReader' in self && 'Blob' in self && (function() {
-	      try {
-	        new Blob()
-	        return true
-	      } catch(e) {
-	        return false
-	      }
-	    })(),
-	    formData: 'FormData' in self,
-	    arrayBuffer: 'ArrayBuffer' in self
-	  }
-
-	  if (support.arrayBuffer) {
-	    var viewClasses = [
-	      '[object Int8Array]',
-	      '[object Uint8Array]',
-	      '[object Uint8ClampedArray]',
-	      '[object Int16Array]',
-	      '[object Uint16Array]',
-	      '[object Int32Array]',
-	      '[object Uint32Array]',
-	      '[object Float32Array]',
-	      '[object Float64Array]'
-	    ]
-
-	    var isDataView = function(obj) {
-	      return obj && DataView.prototype.isPrototypeOf(obj)
-	    }
-
-	    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
-	      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
-	    }
-	  }
-
-	  function normalizeName(name) {
-	    if (typeof name !== 'string') {
-	      name = String(name)
-	    }
-	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-	      throw new TypeError('Invalid character in header field name')
-	    }
-	    return name.toLowerCase()
-	  }
-
-	  function normalizeValue(value) {
-	    if (typeof value !== 'string') {
-	      value = String(value)
-	    }
-	    return value
-	  }
-
-	  // Build a destructive iterator for the value list
-	  function iteratorFor(items) {
-	    var iterator = {
-	      next: function() {
-	        var value = items.shift()
-	        return {done: value === undefined, value: value}
-	      }
-	    }
-
-	    if (support.iterable) {
-	      iterator[Symbol.iterator] = function() {
-	        return iterator
-	      }
-	    }
-
-	    return iterator
-	  }
-
-	  function Headers(headers) {
-	    this.map = {}
-
-	    if (headers instanceof Headers) {
-	      headers.forEach(function(value, name) {
-	        this.append(name, value)
-	      }, this)
-
-	    } else if (headers) {
-	      Object.getOwnPropertyNames(headers).forEach(function(name) {
-	        this.append(name, headers[name])
-	      }, this)
-	    }
-	  }
-
-	  Headers.prototype.append = function(name, value) {
-	    name = normalizeName(name)
-	    value = normalizeValue(value)
-	    var oldValue = this.map[name]
-	    this.map[name] = oldValue ? oldValue+','+value : value
-	  }
-
-	  Headers.prototype['delete'] = function(name) {
-	    delete this.map[normalizeName(name)]
-	  }
-
-	  Headers.prototype.get = function(name) {
-	    name = normalizeName(name)
-	    return this.has(name) ? this.map[name] : null
-	  }
-
-	  Headers.prototype.has = function(name) {
-	    return this.map.hasOwnProperty(normalizeName(name))
-	  }
-
-	  Headers.prototype.set = function(name, value) {
-	    this.map[normalizeName(name)] = normalizeValue(value)
-	  }
-
-	  Headers.prototype.forEach = function(callback, thisArg) {
-	    for (var name in this.map) {
-	      if (this.map.hasOwnProperty(name)) {
-	        callback.call(thisArg, this.map[name], name, this)
-	      }
-	    }
-	  }
-
-	  Headers.prototype.keys = function() {
-	    var items = []
-	    this.forEach(function(value, name) { items.push(name) })
-	    return iteratorFor(items)
-	  }
-
-	  Headers.prototype.values = function() {
-	    var items = []
-	    this.forEach(function(value) { items.push(value) })
-	    return iteratorFor(items)
-	  }
-
-	  Headers.prototype.entries = function() {
-	    var items = []
-	    this.forEach(function(value, name) { items.push([name, value]) })
-	    return iteratorFor(items)
-	  }
-
-	  if (support.iterable) {
-	    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
-	  }
-
-	  function consumed(body) {
-	    if (body.bodyUsed) {
-	      return Promise.reject(new TypeError('Already read'))
-	    }
-	    body.bodyUsed = true
-	  }
-
-	  function fileReaderReady(reader) {
-	    return new Promise(function(resolve, reject) {
-	      reader.onload = function() {
-	        resolve(reader.result)
-	      }
-	      reader.onerror = function() {
-	        reject(reader.error)
-	      }
-	    })
-	  }
-
-	  function readBlobAsArrayBuffer(blob) {
-	    var reader = new FileReader()
-	    var promise = fileReaderReady(reader)
-	    reader.readAsArrayBuffer(blob)
-	    return promise
-	  }
-
-	  function readBlobAsText(blob) {
-	    var reader = new FileReader()
-	    var promise = fileReaderReady(reader)
-	    reader.readAsText(blob)
-	    return promise
-	  }
-
-	  function readArrayBufferAsText(buf) {
-	    var view = new Uint8Array(buf)
-	    var chars = new Array(view.length)
-
-	    for (var i = 0; i < view.length; i++) {
-	      chars[i] = String.fromCharCode(view[i])
-	    }
-	    return chars.join('')
-	  }
-
-	  function bufferClone(buf) {
-	    if (buf.slice) {
-	      return buf.slice(0)
-	    } else {
-	      var view = new Uint8Array(buf.byteLength)
-	      view.set(new Uint8Array(buf))
-	      return view.buffer
-	    }
-	  }
-
-	  function Body() {
-	    this.bodyUsed = false
-
-	    this._initBody = function(body) {
-	      this._bodyInit = body
-	      if (!body) {
-	        this._bodyText = ''
-	      } else if (typeof body === 'string') {
-	        this._bodyText = body
-	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-	        this._bodyBlob = body
-	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-	        this._bodyFormData = body
-	      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-	        this._bodyText = body.toString()
-	      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
-	        this._bodyArrayBuffer = bufferClone(body.buffer)
-	        // IE 10-11 can't handle a DataView body.
-	        this._bodyInit = new Blob([this._bodyArrayBuffer])
-	      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
-	        this._bodyArrayBuffer = bufferClone(body)
-	      } else {
-	        throw new Error('unsupported BodyInit type')
-	      }
-
-	      if (!this.headers.get('content-type')) {
-	        if (typeof body === 'string') {
-	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
-	        } else if (this._bodyBlob && this._bodyBlob.type) {
-	          this.headers.set('content-type', this._bodyBlob.type)
-	        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-	          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
-	        }
-	      }
-	    }
-
-	    if (support.blob) {
-	      this.blob = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-
-	        if (this._bodyBlob) {
-	          return Promise.resolve(this._bodyBlob)
-	        } else if (this._bodyArrayBuffer) {
-	          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as blob')
-	        } else {
-	          return Promise.resolve(new Blob([this._bodyText]))
-	        }
-	      }
-
-	      this.arrayBuffer = function() {
-	        if (this._bodyArrayBuffer) {
-	          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
-	        } else {
-	          return this.blob().then(readBlobAsArrayBuffer)
-	        }
-	      }
-	    }
-
-	    this.text = function() {
-	      var rejected = consumed(this)
-	      if (rejected) {
-	        return rejected
-	      }
-
-	      if (this._bodyBlob) {
-	        return readBlobAsText(this._bodyBlob)
-	      } else if (this._bodyArrayBuffer) {
-	        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
-	      } else if (this._bodyFormData) {
-	        throw new Error('could not read FormData body as text')
-	      } else {
-	        return Promise.resolve(this._bodyText)
-	      }
-	    }
-
-	    if (support.formData) {
-	      this.formData = function() {
-	        return this.text().then(decode)
-	      }
-	    }
-
-	    this.json = function() {
-	      return this.text().then(JSON.parse)
-	    }
-
-	    return this
-	  }
-
-	  // HTTP methods whose capitalization should be normalized
-	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-
-	  function normalizeMethod(method) {
-	    var upcased = method.toUpperCase()
-	    return (methods.indexOf(upcased) > -1) ? upcased : method
-	  }
-
-	  function Request(input, options) {
-	    options = options || {}
-	    var body = options.body
-
-	    if (typeof input === 'string') {
-	      this.url = input
-	    } else {
-	      if (input.bodyUsed) {
-	        throw new TypeError('Already read')
-	      }
-	      this.url = input.url
-	      this.credentials = input.credentials
-	      if (!options.headers) {
-	        this.headers = new Headers(input.headers)
-	      }
-	      this.method = input.method
-	      this.mode = input.mode
-	      if (!body && input._bodyInit != null) {
-	        body = input._bodyInit
-	        input.bodyUsed = true
-	      }
-	    }
-
-	    this.credentials = options.credentials || this.credentials || 'omit'
-	    if (options.headers || !this.headers) {
-	      this.headers = new Headers(options.headers)
-	    }
-	    this.method = normalizeMethod(options.method || this.method || 'GET')
-	    this.mode = options.mode || this.mode || null
-	    this.referrer = null
-
-	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-	      throw new TypeError('Body not allowed for GET or HEAD requests')
-	    }
-	    this._initBody(body)
-	  }
-
-	  Request.prototype.clone = function() {
-	    return new Request(this, { body: this._bodyInit })
-	  }
-
-	  function decode(body) {
-	    var form = new FormData()
-	    body.trim().split('&').forEach(function(bytes) {
-	      if (bytes) {
-	        var split = bytes.split('=')
-	        var name = split.shift().replace(/\+/g, ' ')
-	        var value = split.join('=').replace(/\+/g, ' ')
-	        form.append(decodeURIComponent(name), decodeURIComponent(value))
-	      }
-	    })
-	    return form
-	  }
-
-	  function parseHeaders(rawHeaders) {
-	    var headers = new Headers()
-	    rawHeaders.split('\r\n').forEach(function(line) {
-	      var parts = line.split(':')
-	      var key = parts.shift().trim()
-	      if (key) {
-	        var value = parts.join(':').trim()
-	        headers.append(key, value)
-	      }
-	    })
-	    return headers
-	  }
-
-	  Body.call(Request.prototype)
-
-	  function Response(bodyInit, options) {
-	    if (!options) {
-	      options = {}
-	    }
-
-	    this.type = 'default'
-	    this.status = 'status' in options ? options.status : 200
-	    this.ok = this.status >= 200 && this.status < 300
-	    this.statusText = 'statusText' in options ? options.statusText : 'OK'
-	    this.headers = new Headers(options.headers)
-	    this.url = options.url || ''
-	    this._initBody(bodyInit)
-	  }
-
-	  Body.call(Response.prototype)
-
-	  Response.prototype.clone = function() {
-	    return new Response(this._bodyInit, {
-	      status: this.status,
-	      statusText: this.statusText,
-	      headers: new Headers(this.headers),
-	      url: this.url
-	    })
-	  }
-
-	  Response.error = function() {
-	    var response = new Response(null, {status: 0, statusText: ''})
-	    response.type = 'error'
-	    return response
-	  }
-
-	  var redirectStatuses = [301, 302, 303, 307, 308]
-
-	  Response.redirect = function(url, status) {
-	    if (redirectStatuses.indexOf(status) === -1) {
-	      throw new RangeError('Invalid status code')
-	    }
-
-	    return new Response(null, {status: status, headers: {location: url}})
-	  }
-
-	  self.Headers = Headers
-	  self.Request = Request
-	  self.Response = Response
-
-	  self.fetch = function(input, init) {
-	    return new Promise(function(resolve, reject) {
-	      var request = new Request(input, init)
-	      var xhr = new XMLHttpRequest()
-
-	      xhr.onload = function() {
-	        var options = {
-	          status: xhr.status,
-	          statusText: xhr.statusText,
-	          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
-	        }
-	        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
-	        var body = 'response' in xhr ? xhr.response : xhr.responseText
-	        resolve(new Response(body, options))
-	      }
-
-	      xhr.onerror = function() {
-	        reject(new TypeError('Network request failed'))
-	      }
-
-	      xhr.ontimeout = function() {
-	        reject(new TypeError('Network request failed'))
-	      }
-
-	      xhr.open(request.method, request.url, true)
-
-	      if (request.credentials === 'include') {
-	        xhr.withCredentials = true
-	      }
-
-	      if ('responseType' in xhr && support.blob) {
-	        xhr.responseType = 'blob'
-	      }
-
-	      request.headers.forEach(function(value, name) {
-	        xhr.setRequestHeader(name, value)
-	      })
-
-	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-	    })
-	  }
-	  self.fetch.polyfill = true
-	})(typeof self !== 'undefined' ? self : this);
-
-
-/***/ },
-/* 181 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -22177,6 +21733,7 @@
 
 	var Book = function Book(props) {
 	  var title = props.title,
+	      image = props.image,
 	      author = props.author,
 	      pages = props.pages,
 	      genre = props.genre,
@@ -22196,6 +21753,11 @@
 	    { className: 'book' },
 	    _react2.default.createElement(
 	      'div',
+	      { className: 'bookImg' },
+	      _react2.default.createElement('img', { src: image })
+	    ),
+	    _react2.default.createElement(
+	      'div',
 	      { className: 'data' },
 	      _react2.default.createElement(
 	        'div',
@@ -22206,7 +21768,7 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'author' },
-	        titleLabel,
+	        authorLabel,
 	        author
 	      ),
 	      _react2.default.createElement(
@@ -22243,7 +21805,7 @@
 	exports.default = Book;
 
 /***/ },
-/* 182 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22261,6 +21823,7 @@
 	var BookCompleted = function BookCompleted(props) {
 	  var title = props.title,
 	      author = props.author,
+	      image = props.image,
 	      pages = props.pages,
 	      genre = props.genre,
 	      id = props.id,
@@ -22276,6 +21839,11 @@
 	    { className: 'book', id: id },
 	    _react2.default.createElement(
 	      'div',
+	      { className: 'bookImg' },
+	      _react2.default.createElement('img', { src: image })
+	    ),
+	    _react2.default.createElement(
+	      'div',
 	      { className: 'data' },
 	      _react2.default.createElement(
 	        'div',
@@ -22286,7 +21854,7 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'author' },
-	        titleLabel,
+	        authorLabel,
 	        author
 	      ),
 	      _react2.default.createElement(
@@ -22308,7 +21876,7 @@
 	exports.default = BookCompleted;
 
 /***/ },
-/* 183 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22328,6 +21896,7 @@
 	      author = props.author,
 	      pages = props.pages,
 	      genre = props.genre,
+	      image = props.image,
 	      updateForm = props.updateForm,
 	      submitForm = props.submitForm;
 
@@ -22338,30 +21907,45 @@
 	    _react2.default.createElement(
 	      "div",
 	      { id: "formElements" },
-	      _react2.default.createElement("input", { type: "text",
+	      _react2.default.createElement("input", {
+	        type: "text",
 	        id: "newTitle",
 	        placeholder: "title",
 	        value: title,
-	        onChange: updateForm }),
-	      _react2.default.createElement("input", { type: "text",
+	        onChange: updateForm
+	      }),
+	      _react2.default.createElement("input", {
+	        type: "text",
 	        id: "newAuthor",
 	        placeholder: "author",
 	        value: author,
-	        onChange: updateForm }),
-	      _react2.default.createElement("input", { type: "text",
+	        onChange: updateForm
+	      }),
+	      _react2.default.createElement("input", {
+	        type: "text",
 	        id: "newPages",
 	        placeholder: "pages",
 	        value: pages,
-	        onChange: updateForm }),
-	      _react2.default.createElement("input", { type: "text",
+	        onChange: updateForm
+	      }),
+	      _react2.default.createElement("input", {
+	        type: "text",
 	        id: "newGenre",
 	        placeholder: "genre",
 	        value: genre,
-	        onChange: updateForm }),
+	        onChange: updateForm
+	      }),
+	      _react2.default.createElement("input", {
+	        type: "text",
+	        id: "newImage",
+	        placeholder: "image url",
+	        value: image,
+	        onChange: updateForm
+	      }),
 	      _react2.default.createElement(
 	        "button",
 	        { onClick: submitForm },
-	        "Add New Book"
+	        "add new book"
 	      )
 	    )
 	  );
@@ -22370,13 +21954,87 @@
 	exports.default = Form;
 
 /***/ },
-/* 184 */
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Dashboard = function Dashboard(props) {
+	  return _react2.default.createElement(
+	    "div",
+	    { id: "dashboard" },
+	    _react2.default.createElement(
+	      "h1",
+	      null,
+	      "overview"
+	    ),
+	    _react2.default.createElement(
+	      "div",
+	      { id: "dashStats" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "stat" },
+	        "total books read: ",
+	        _react2.default.createElement(
+	          "span",
+	          { className: "val" },
+	          "27"
+	        )
+	      ),
+	      _react2.default.createElement(
+	        "div",
+	        { className: "stat" },
+	        "books in progress: ",
+	        _react2.default.createElement(
+	          "span",
+	          { className: "val" },
+	          "2"
+	        )
+	      ),
+	      _react2.default.createElement(
+	        "div",
+	        { className: "stat" },
+	        "average books per month: ",
+	        _react2.default.createElement(
+	          "span",
+	          { className: "val" },
+	          "1.5"
+	        )
+	      ),
+	      _react2.default.createElement(
+	        "div",
+	        { className: "stat" },
+	        "average pages per day: ",
+	        _react2.default.createElement(
+	          "span",
+	          { className: "val" },
+	          "30"
+	        )
+	      )
+	    )
+	  );
+	};
+
+	exports.default = Dashboard;
+
+/***/ },
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(185);
+	var content = __webpack_require__(184);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(187)(content, {});
@@ -22396,21 +22054,21 @@
 	}
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(186)();
+	exports = module.exports = __webpack_require__(185)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "body {\n  margin: 0;\n  padding: 0;\n  background-color: #ba9983;\n  font-family: Arial;\n  color: #3d1f0c; }\n\n#main {\n  width: 900px;\n  margin-top: 50px;\n  margin: auto;\n  padding-top: 50px; }\n\n#form {\n  margin-top: 50px;\n  width: 300px;\n  margin: auto;\n  margin-bottom: 20px;\n  float: right;\n  clear: both;\n  background-color: #f9ece3;\n  padding: 10px;\n  border-radius: 10px; }\n\n#formElements {\n  width: 280px;\n  margin: auto; }\n\ninput {\n  width: 250px;\n  border-radius: 3px;\n  height: 30px;\n  font-size: 1.2em;\n  margin: auto;\n  margin-bottom: 10px; }\n\nbutton {\n  background-color: #ba9983;\n  border-radius: 3px;\n  height: 30px;\n  width: 250px;\n  font-size: 20px;\n  margin: auto; }\n\n#current {\n  display: block;\n  clear: both;\n  width: 1000px;\n  height: 100px;\n  margin-top: 350px;\n  margin: auto; }\n\n#finished {\n  display: block;\n  clear: both;\n  width: 1000px;\n  height: 100px;\n  margin-top: 50px;\n  margin: auto; }\n\n.book {\n  margin-bottom: 20px;\n  width: 90%;\n  float: left;\n  clear: both;\n  height: 175px;\n  border-radius: 4px;\n  background-color: #f9ece3;\n  border: 1px solid gainsboro;\n  font-size: 1.5em;\n  font-weight: 550;\n  text-align: left;\n  padding: 10px; }\n\n.data {\n  width: 50%;\n  float: left; }\n", ""]);
+	exports.push([module.id, "body {\n  margin: 0;\n  padding: 0;\n  background-color: #dcd0c0;\n  font-family: 'Josefin Sans', sans-serif;\n  color: #373737;\n  font-size: 1.5em; }\n\n#main {\n  width: 100%;\n  margin: 0;\n  padding: 0; }\n\n#title {\n  background: url(" + __webpack_require__(186) + ") no-repeat;\n  height: 200px;\n  width: 100%;\n  color: #c0b283;\n  font-style: italic;\n  font-size: 1.5em;\n  padding: 30px;\n  margin: 0; }\n\n#title h1 {\n  margin-top: 150px; }\n\n#form {\n  width: 400px;\n  margin-top: 30px;\n  margin-left: 50px;\n  float: left;\n  background-color: #f4f4f4;\n  font-family: 'Josefin Sans', sans-serif;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 2px 2px 5px #373737; }\n\n#formElements {\n  width: 360px;\n  margin: auto; }\n\ninput {\n  font-family: 'Josefin Sans', sans-serif;\n  width: 350px;\n  border-radius: 3px;\n  height: 30px;\n  font-size: 1.2em;\n  margin: auto;\n  margin-bottom: 10px; }\n\nbutton {\n  font-family: 'Josefin Sans', sans-serif;\n  background-color: #c0b283;\n  border-radius: 5px;\n  height: 50px;\n  width: 360px;\n  font-size: 20px;\n  margin: auto;\n  font-size: 1.2em;\n  box-shadow: 2px 2px 5px #373737;\n  border: none;\n  margin-top: 10px; }\n\nbutton:hover,\nbutton:active,\nbutton:focus,\ninput:active,\ninput:focus {\n  outline: none; }\n\n.book {\n  width: 400px;\n  margin-top: 20px;\n  margin-left: 20px;\n  float: left;\n  background-color: #f4f4f4;\n  font-family: 'Josefin Sans', sans-serif;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 2px 2px 5px #373737; }\n\n.bookImg {\n  width: 250px;\n  margin: auto; }\n\n.bookImg img {\n  width: 250px; }\n\n.data {\n  width: 50%;\n  float: left; }\n\n.row {\n  width: 100%;\n  margin: 0;\n  padding: 20px;\n  height: 300px; }\n\n#dashboard {\n  width: 400px;\n  margin-top: 20px;\n  margin-left: 20px;\n  float: left; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports) {
 
 	/*
@@ -22464,6 +22122,12 @@
 		return list;
 	};
 
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "/images/book.jpg";
 
 /***/ },
 /* 187 */

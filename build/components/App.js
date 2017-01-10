@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import Book from './Book';
 import BookCompleted from './BookCompleted';
 import Form from './Form';
+import Dashboard from './Dashboard';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.updateForm = this.updateForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
-    this.markComplete = this.markComplete.bind(this);
     this.state = {
       currentBooks: [],
       finishedBooks: [],
@@ -16,6 +16,7 @@ class App extends Component {
       newAuthor: '',
       newPages: '',
       newGenre: '',
+      newImage: '',
     };
   }
 
@@ -45,6 +46,7 @@ class App extends Component {
       author: this.state.newAuthor,
       pages: Number(this.state.newPages),
       genre: this.state.newGenre,
+      image: this.state.newImage,
     };
 
     // Adds form data to the database via the 'postbook' route
@@ -65,6 +67,7 @@ class App extends Component {
           newAuthor: '',
           newPages: '',
           newGenre: '',
+          newImage: '',
           currentBooks: newBooks,
         });
     });
@@ -95,10 +98,10 @@ class App extends Component {
           author={book.author}
           pages={book.pages}
           genre={book.genre}
+          image={book.image}
           key={`book${i}`}
           id={i}
           days={days}
-          markComplete={this.state.markComplete}
         />);
     });
 
@@ -111,26 +114,34 @@ class App extends Component {
           author={book.author}
           pages={book.pages}
           genre={book.genre}
+          image={book.image}
           key={`bookComplete${i}`}
         />);
     });
 
     return (
       <div id="main">
-        <Form
-          title={this.state.newTitle}
-          author={this.state.newAuthor}
-          pages={this.state.newPages}
-          genre={this.state.newGenre}
-          updateForm={this.updateForm}
-          submitForm={this.submitForm}
-        />
-        <div id="current">
-          <h1>Currently Reading</h1>
+        <div id="title">
+          <h1>what will you read today?</h1>
+        </div>
+        <div className="row">
+          <Dashboard />
+          <Form
+            title={this.state.newTitle}
+            author={this.state.newAuthor}
+            pages={this.state.newPages}
+            genre={this.state.newGenre}
+            image={this.state.newImage}
+            updateForm={this.updateForm}
+            submitForm={this.submitForm}
+          />
+        </div>
+        <div className="row">
+          <h1>books in progress</h1>
           {curBooksDivs}
         </div>
-        <div id="finished">
-          <h1>Read Earlier This Year</h1>
+        <div className="row">
+          <h1>completed books</h1>
           {finBooksDivs}
         </div>
       </div>

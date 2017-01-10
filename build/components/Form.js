@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Form = (props) => {
-  const { title, author, pages, genre, updateForm, submitForm } = props;
+  const { title, author, pages, genre, image, updateForm, submitForm } = props;
 
   return (
     <div id="form">
@@ -34,7 +34,14 @@ const Form = (props) => {
           value={genre}
           onChange={updateForm}
         />
-        <button onClick={submitForm}>Add New Book</button>
+        <input
+          type="text"
+          id="newImage"
+          placeholder="image url"
+          value={image}
+          onChange={updateForm}
+        />
+      <button onClick={submitForm}>add new book</button>
       </div>
     </div>
   );

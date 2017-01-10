@@ -30,16 +30,16 @@ bookController.updateBooks = (req, res) => {
         author: req.body.author,
         genre: req.body.genre,
         pages: req.body.pages,
+        image: req.body.image,
         startDate: Date.now() },
         (error, newBook) => {
           if (error) {
             res.json('error');
           } else {
             const newBookList = [...curBooks, newBook];
-            user.books = newBookList;
-            user.update((er) => {
+            user.update({ $set: { books: newBookList } }, (er) => {
               if (er) {
-                res.json('error');
+                console.log('error');
               }
             });
           }

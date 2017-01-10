@@ -14,8 +14,13 @@ sessionController.isLoggedIn = (req, res, next) => {
 // Creates a session in the database for a new user
 sessionController.startSession = (req, res) => {
   const username = req.body.username;
-  Session.create({ cookieId: req.cookies.ssid });
-  res.redirect(`/home/${username}`);
+  Session.create({ cookieId: req.body.id }, (err, session) => {
+    if (err) {
+      res.send('error');
+    } else {
+      res.redirect(`/home/${username}`);
+    }
+  })
 };
 
 module.exports = sessionController;

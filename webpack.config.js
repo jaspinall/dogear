@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  entry: './reactBuild/index.js',
+  entry: './build/index.js',
   output: {
     path: path.join(__dirname, '/client'),
     filename: 'bundle.js'
@@ -20,7 +20,11 @@ module.exports = {
         test: /scss$/,
         exclude: /node_modules/,
         loaders: ['style', 'css', 'sass']
-      }
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: "file-loader?name=/images/[name].[ext]"
+      },
     ]
   }
 }

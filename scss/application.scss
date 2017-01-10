@@ -1,37 +1,53 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #ba9983;
-  font-family: Arial;
-  color: #3d1f0c;
+  background-color: #dcd0c0;
+  font-family: 'Josefin Sans', sans-serif;
+  color: #373737;
+  font-size: 1.5em;
 }
 
 #main {
-  width: 900px;
-  margin-top: 50px;
-  margin: auto;
-  padding-top: 50px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#title {
+  background: url('../build/images/book.jpg') no-repeat;
+  height: 200px;
+  width: 100%;
+  color: #c0b283;
+  font-style: italic;
+  font-size: 1.5em;
+  padding: 30px;
+  margin: 0;
+}
+
+#title h1 {
+  margin-top: 150px;
 }
 
 #form {
-  margin-top: 50px;
-  width: 300px;
-  margin: auto;
-  margin-bottom: 20px;
-  float: right;
-  clear: both;
-  background-color: #f9ece3;
-  padding: 10px;
+  width: 400px;
+  margin-top: 30px;
+  margin-left: 50px;
+  float: left;
+  background-color: #f4f4f4;
+  font-family: 'Josefin Sans', sans-serif;
+  padding: 20px;
   border-radius: 10px;
+  box-shadow: 2px 2px 5px #373737;
 }
 
 #formElements {
-  width: 280px;
+  width: 360px;
   margin: auto;
 }
 
 input {
-  width: 250px;
+  font-family: 'Josefin Sans', sans-serif;
+  width: 350px;
   border-radius: 3px;
   height: 30px;
   font-size: 1.2em;
@@ -40,48 +56,63 @@ input {
 }
 
 button {
-  background-color: #ba9983;
-  border-radius: 3px;
-  height: 30px;
-  width: 250px;
+  font-family: 'Josefin Sans', sans-serif;
+  background-color: #c0b283;
+  border-radius: 5px;
+  height: 50px;
+  width: 360px;
   font-size: 20px;
   margin: auto;
+  font-size: 1.2em;
+  box-shadow: 2px 2px 5px #373737;
+  border: none;
+  margin-top: 10px;
 }
 
-#current {
-  display: block;
-  clear: both;
-  width: 1000px;
-  height: 100px;
-  margin-top: 350px;
-  margin: auto;
-}
-
-#finished {
-  display: block;
-  clear: both;
-  width: 1000px;
-  height: 100px;
-  margin-top: 50px;
-  margin: auto;
+button:hover,
+button:active,
+button:focus,
+input:active,
+input:focus {
+  outline: none;
 }
 
 .book {
-  margin-bottom: 20px;
-  width: 90%;
+  width: 400px;
+  margin-top: 20px;
+  margin-left: 20px;
   float: left;
-  clear: both;
-  height: 175px;
-  border-radius: 4px;
-  background-color: #f9ece3;
-  border: 1px solid gainsboro;
-  font-size: 1.5em;
-  font-weight: 550;
-  text-align: left;
-  padding: 10px;
+  background-color: #f4f4f4;
+  font-family: 'Josefin Sans', sans-serif;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px #373737;
+}
+
+.bookImg {
+  width: 250px;
+  margin: auto;
+}
+
+.bookImg img {
+  width: 250px;
 }
 
 .data {
   width: 50%;
+  float: left;
+}
+
+.row {
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  height: 300px;
+}
+
+#dashboard {
+  width: 400px;
+  margin-top: 20px;
+  margin-left: 20px;
   float: left;
 }

@@ -9,6 +9,7 @@ const bookSchema = new Schema({
   pages: { type: Number, required: true },
   status: { type: String, required: true, default: 'Not Started' },
   genre: { type: String },
+  image: { type: String },
   startDate: { type: Date },
   endDate: { type: Date },
 });

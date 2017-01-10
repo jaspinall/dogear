@@ -1,6 +1,7 @@
 body {
   font-size: 1.5em;
-  font-family: arial;
+  font-family: 'Josefin Sans', sans-serif;
+  color: #373737;
   text-align: center;
   margin: 0;
   padding: 0;
@@ -8,21 +9,34 @@ body {
 }
 
 input {
+  font-family: 'Josefin Sans', sans-serif;
   margin: auto;
   height: 45px;
   width: 200px;
   font-size: 1.2em;
   display: block;
   margin-bottom: 10px;
-  border-radius: 3px;
+  border-radius: 5px;
 }
 
 button {
   height: 50px;
   width: 200px;
+  font-family: 'Josefin Sans', sans-serif;
   font-size: 1.2em;
   border-radius: 5px;
   background-color: #ba9983;
+  box-shadow: 2px 2px 5px #373737;
+  border: none;
+  margin-top: 10px;
+}
+
+button:hover,
+button:active,
+button:focus,
+input:active,
+input:focus {
+  outline: none;
 }
 
 #content {
@@ -33,19 +47,21 @@ button {
   width: 500px;
   background-color: #f9ece3;
   height: 550px;
+  box-shadow: 10px 10px 5px #2a2325;
 }
 
 #top {
   margin-top: 20px;
   margin: auto;
-  width: 300px;
+  width: 280px;
 }
 
 #img {
   width: 200px;
   margin: auto;
+  margin-top: 10px;
 }
 
-#img img {
+img {
   width: 180px;
 }
