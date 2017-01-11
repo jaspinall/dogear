@@ -34,7 +34,7 @@ bookController.updateBooks = (req, res) => {
         startDate: Date.now() },
         (error, newBook) => {
           if (error) {
-            res.json('error');
+            console.log('error');
           } else {
             const newBookList = [...curBooks, newBook];
             user.update({ $set: { books: newBookList } }, (er) => {

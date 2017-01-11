@@ -1,15 +1,27 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="mystyle.css">
+  <title>User Login</title>
 </head>
 <body>
-  Login
-  <form method="POST" action='/login'>
+  <div id="content">
+  <div id="top">
+    <div id="img"><img src="./images/dogear.png" /></div>
+    <h1>DogEar</h1>
+    <p>Track your reading habits. Read good stuff.</p>
+  </div>
+  <form method='POST' action='/login'>
     <input name="username" type="text" placeholder="username"></input>
     <input name="password" type="password" placeholder="password"></input>
-    <input type='submit' value="login">
+    <button type='submit'>log in</button>
+    <a href='/'>sign up</a>
+    <% if (error) { %>
+      <div>  Error </div>
+      <div> <%= error %> </div>
+    <% } %>
   </form>
-  <a href='./signup'>Sign up</a>
+</div>
 </body>
 </html>

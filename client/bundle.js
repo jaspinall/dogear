@@ -21568,7 +21568,7 @@
 	      }).then(function (userData) {
 	        // Iterates through a user's books. Divides them into 'current' or 'finished' based on status
 	        userData.books.forEach(function (book) {
-	          if (book.status === 'In Progress') {
+	          if (book.status === 'Not Started') {
 	            currentBooks.push(book);
 	          } else {
 	            finishedBooks.push(book);

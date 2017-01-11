@@ -29,6 +29,7 @@ userController.verifyUser = (req, res, next) => {
     if (user) {
       const result = user.verify(inputUser.password);
       if (result) {
+        req.body.id = user._id;
         next();
       }
     } else {
@@ -39,13 +40,11 @@ userController.verifyUser = (req, res, next) => {
 
 // Shows the user the home page if he/she has a cookie
 userController.showHome = (req, res) => {
-  User.findOne({ username: req.params.username }, (err) => {
+  User.findById(req.cookies.ssid, (err, user) => {
     if (err) {
       res.render('./../client/signup', { error: err });
-      res.end();
     } else {
       res.render('./../client/home');
-      res.end();
     }
   });
 };

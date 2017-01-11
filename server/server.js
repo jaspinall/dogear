@@ -20,12 +20,12 @@ app.use(cookieParser());
 app.use(express.static('client'));
 
 // Routes
-app.get('/', (req, res) => {
-  res.render('./../client/index');
+app.get('/', sessionController.isLoggedIn, (req, res) => {
+  res.render('./../client/signup', { error: null });
 });
 
-app.get('/signup', (req, res) => {
-  res.render('./../client/signup', { error: null });
+app.get('/login', (req, res) => {
+  res.render('./../client/index', { error: null });
 });
 
 app.post('/signup', userController.createUser, cookieController.setSSIDCookie, sessionController.startSession);
@@ -33,8 +33,6 @@ app.post('/signup', userController.createUser, cookieController.setSSIDCookie, s
 app.post('/login', userController.verifyUser, cookieController.setSSIDCookie, sessionController.startSession);
 
 app.use(bodyParser.json());
-
-app.get('/home/:username', sessionController.isLoggedIn, userController.showHome);
 
 app.get('/mybooks', bookController.getBooks);
 
